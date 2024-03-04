@@ -67,6 +67,8 @@ dotnet add package XperienceCommunity.CSP
     app.UseXperienceCommunityCspManagement();
    ```
 
+1. That's it, launch your website and the module should be installed ready to go! Once you've configured your CSP headers, load a page on the website and check the headers in your browser console.
+
 
 ## Contributing
 
