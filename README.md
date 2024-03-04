@@ -1,8 +1,8 @@
-﻿# Xperience Community: CSP Management
+﻿# Xperience Community: Content Security Policy (CSP) Management
 
 ## Description
 
-Adds a module to the admin site for easy configuration of CSP headers for web channels.
+Adds a module to the admin site for easy configuration of Content Security Policy (CSP) headers for web channels.
 
 ## Screenshots
 
