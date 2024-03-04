@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="Kentico.Xperience.Admin" Version="28.2.0" />
+	</ItemGroup>
+</Project>
