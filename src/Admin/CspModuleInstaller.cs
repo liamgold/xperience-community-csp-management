@@ -13,7 +13,7 @@ internal interface ICspModuleInstaller
     void Install();
 }
 
-internal class CspModuleInstaller(IResourceInfoProvider resourceInfoProvider) : ICspModuleInstaller
+internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider) : ICspModuleInstaller
 {
     public void Install()
     {
