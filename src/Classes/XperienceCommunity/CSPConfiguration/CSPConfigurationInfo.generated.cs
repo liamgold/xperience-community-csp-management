@@ -7,11 +7,11 @@ using System.Linq;
 using CMS;
 using CMS.DataEngine;
 using CMS.Helpers;
-using XperienceCommunity.CSPManagement;
+using XperienceCommunity.CSP;
 
 [assembly: RegisterObjectType(typeof(CSPConfigurationInfo), CSPConfigurationInfo.OBJECT_TYPE)]
 
-namespace XperienceCommunity.CSPManagement
+namespace XperienceCommunity.CSP
 {
     /// <summary>
     /// Data container class for <see cref="CSPConfigurationInfo"/>.
@@ -28,7 +28,7 @@ namespace XperienceCommunity.CSPManagement
         /// <summary>
         /// Type information.
         /// </summary>
-        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(IInfoProvider<CSPConfigurationInfo>), OBJECT_TYPE, "XperienceCommunity.CSPConfiguration", "CSPConfigurationID", null, null, null, "CSPConfigurationSourceUrl", null, null, null)
+        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(IInfoProvider<CSPConfigurationInfo>), OBJECT_TYPE, "XperienceCommunity.CSPConfiguration", "CSPConfigurationID", null, null, null, null, null, null, null)
         {
             TouchCacheDependencies = true,
             DependsOn = new List<ObjectDependency>()

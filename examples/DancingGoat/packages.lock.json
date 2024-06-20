@@ -949,6 +949,12 @@
         "dependencies": {
           "System.IO.Hashing": "7.0.0"
         }
+      },
+      "xperiencecommunity.csp": {
+        "type": "Project",
+        "dependencies": {
+          "Kentico.Xperience.Admin": "[29.1.4, )"
+        }
       }
     }
   }

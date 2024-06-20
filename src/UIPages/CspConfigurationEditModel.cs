@@ -1,14 +1,18 @@
 ﻿using CMS.ContentEngine;
+using CMS.DataEngine;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 using XperienceCommunity.CSP.UIFormComponents;
-using XperienceCommunity.CSPManagement;
 
 namespace XperienceCommunity.CSP.UIPages;
 
 internal class CspConfigurationEditModel
 {
     [RequiredValidationRule]
-    [ObjectIdSelectorComponent(objectType: ChannelInfo.OBJECT_TYPE, Label = "Channel", Order = 1)]
+    [ObjectIdSelectorComponent(
+        objectType: ChannelInfo.OBJECT_TYPE,
+        Label = "Channel",
+        WhereConditionProviderType = typeof(WebsiteOnlyChannelInfoWhereConditionProvider),
+        Order = 1)]
     public IEnumerable<int> ChannelIDs { get; set; } = [];
 
     [RequiredValidationRule]
@@ -31,5 +35,10 @@ internal class CspConfigurationEditModel
         info.CSPConfigurationChannelID = ChannelIDs.FirstOrDefault();
         info.CSPConfigurationSourceUrl = SourceUrl;
         info.CSPConfigurationDirectives = string.Join(";", Directives);
+    }
+
+    public class WebsiteOnlyChannelInfoWhereConditionProvider : IObjectSelectorWhereConditionProvider
+    {
+        public WhereCondition Get() => new WhereCondition().WhereEquals(nameof(ChannelInfo.ChannelType), nameof(ChannelType.Website));
     }
 }

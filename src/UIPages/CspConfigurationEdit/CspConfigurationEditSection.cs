@@ -1,6 +1,5 @@
 ﻿using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.CSP.UIPages;
-using XperienceCommunity.CSPManagement;
 
 [assembly: UIPage(
     parentType: typeof(CspConfigurationListing),
