@@ -3,7 +3,6 @@ using CMS.DataEngine;
 using CMS.FormEngine;
 using CMS.Modules;
 using Kentico.Xperience.Admin.Base.Forms;
-using XperienceCommunity.CSPManagement;
 using static XperienceCommunity.CSP.Admin.CspConstants;
 
 namespace XperienceCommunity.CSP.Admin;
@@ -13,7 +12,7 @@ internal interface ICspModuleInstaller
     void Install();
 }
 
-internal class CspModuleInstaller(IResourceInfoProvider resourceInfoProvider) : ICspModuleInstaller
+internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider) : ICspModuleInstaller
 {
     public void Install()
     {

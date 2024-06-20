@@ -25,9 +25,9 @@ public class ContentSecurityPolicyMiddleware
     {
         if (!context.Kentico().Preview().Enabled)
         {
-            var channelId = _websiteChannelContext.WebsiteChannelID;
+            var websiteChannelId = _websiteChannelContext.WebsiteChannelID;
 
-            var configurations = await _cspConfigurationService.GetChannelCspConfigurations(channelId);
+            var configurations = await _cspConfigurationService.GetCspConfigurationsByWebsiteChannelID(websiteChannelId);
 
             var groupedConfigurations = configurations
                 .SelectMany(c => c.CSPConfigurationDirectives

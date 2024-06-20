@@ -21,9 +21,12 @@ Listing shows all configurations, including which web channel they are assigned 
   <img src="src/images/csp-listing.png" width="600" alt="CSP configuration listing screen">
 </a>
 
-## Supported version
+## Library Version Matrix
 
-Xperience by Kentico >= 28.2.0
+| Xperience Version | Library Version |
+| ----------------- | --------------- |
+| >= 29.1.4         | 2.0.0           |
+| >= 28.3.0         | 1.0.0           |
 
 ## Dependencies
 
