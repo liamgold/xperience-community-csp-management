@@ -40,7 +40,8 @@ public class CspConfigurationListing : ListingPage
                 formatter: (value, _) => allChannels.FirstOrDefault(c => c.ChannelID == (int)value)?.ChannelDisplayName ?? ""
             )
             .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationSourceUrl), "Source Url", searchable: true)
-            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationDirectives), "Directives", formatter: FormatDirectives);
+            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationDirectives), "Directives", formatter: FormatDirectives)
+            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationEnabled), "Enabled");
 
         await base.ConfigurePage();
     }

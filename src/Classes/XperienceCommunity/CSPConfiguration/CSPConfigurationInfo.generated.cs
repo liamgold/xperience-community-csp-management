@@ -83,6 +83,17 @@ namespace XperienceCommunity.CSP
 
 
         /// <summary>
+        /// CSP configuration enabled.
+        /// </summary>
+        [DatabaseField]
+        public virtual bool CSPConfigurationEnabled
+        {
+            get => ValidationHelper.GetBoolean(GetValue(nameof(CSPConfigurationEnabled)), false);
+            set => SetValue(nameof(CSPConfigurationEnabled), value);
+        }
+
+
+        /// <summary>
         /// Deletes the object using appropriate provider.
         /// </summary>
         protected override void DeleteObject()

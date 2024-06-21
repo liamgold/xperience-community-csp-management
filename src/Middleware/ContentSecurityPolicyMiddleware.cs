@@ -43,7 +43,10 @@ public class ContentSecurityPolicyMiddleware
 
             var cspHeader = sb.ToString().TrimEnd(' ', ';');
 
-            context.Response.Headers.ContentSecurityPolicy = new(cspHeader);
+            if (!string.IsNullOrWhiteSpace(cspHeader))
+            {
+                context.Response.Headers.ContentSecurityPolicy = new(cspHeader);
+            }
         }
 
         await _next(context);
