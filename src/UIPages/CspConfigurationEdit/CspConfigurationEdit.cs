@@ -48,6 +48,7 @@ internal class CspConfigurationEdit : ModelEditPage<CspConfigurationEditModel>
                 ChannelIDs = [info.CSPConfigurationChannelID],
                 Directives = info.CSPConfigurationDirectives.Split(';', StringSplitOptions.RemoveEmptyEntries),
                 SourceUrl = info.CSPConfigurationSourceUrl,
+                Enabled = info.CSPConfigurationEnabled,
             };
 
             return _model;

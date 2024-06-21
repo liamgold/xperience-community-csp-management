@@ -38,6 +38,7 @@ namespace XperienceCommunity.CSP.Services
                 var cspConfigurations = await _cspConfigurationInfoProvider.Get()
                     .Source(sourceItem => sourceItem.Join<WebsiteChannelInfo>(nameof(CSPConfigurationInfo.CSPConfigurationChannelID), nameof(WebsiteChannelInfo.WebsiteChannelChannelID)))
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), websiteChannelId)
+                    .WhereTrue(nameof(CSPConfigurationInfo.CSPConfigurationEnabled))
                     .GetEnumerableTypedResultAsync()
                     .ConfigureAwait(false);
 

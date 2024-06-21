@@ -94,6 +94,20 @@ internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvid
         formItem.SetComponentName(TextAreaComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(CSPConfigurationInfo.CSPConfigurationEnabled),
+            Visible = true,
+            DataType = FieldDataType.Boolean,
+            Enabled = true,
+            Settings = new()
+            {
+                { nameof(TextInputProperties.Label), "Enabled" },
+            }
+        };
+        formItem.SetComponentName(CheckBoxComponent.IDENTIFIER);
+        formInfo.AddFormItem(formItem);
+
         SetFormDefinition(info, formInfo);
 
         if (info.HasChanged)

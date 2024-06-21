@@ -29,12 +29,16 @@ internal class CspConfigurationEditModel
                 Placeholder = "Choose directives")]
     public IEnumerable<string> Directives { get; set; } = [];
 
+    [RequiredValidationRule]
+    [CheckBoxComponent(Label = "Enabled", Order = 3)]
+    public bool Enabled { get; set; }
 
     public void MapToCSPConfigurationInfo(CSPConfigurationInfo info)
     {
         info.CSPConfigurationChannelID = ChannelIDs.FirstOrDefault();
         info.CSPConfigurationSourceUrl = SourceUrl;
         info.CSPConfigurationDirectives = string.Join(";", Directives);
+        info.CSPConfigurationEnabled = Enabled;
     }
 
     public class WebsiteOnlyChannelInfoWhereConditionProvider : IObjectSelectorWhereConditionProvider
