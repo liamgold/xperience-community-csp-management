@@ -94,6 +94,17 @@ namespace XperienceCommunity.CSP
 
 
         /// <summary>
+        /// CSP configuration use nonce.
+        /// </summary>
+        [DatabaseField]
+        public virtual bool CSPConfigurationUseNonce
+        {
+            get => ValidationHelper.GetBoolean(GetValue(nameof(CSPConfigurationUseNonce)), false);
+            set => SetValue(nameof(CSPConfigurationUseNonce), value);
+        }
+
+
+        /// <summary>
         /// Deletes the object using appropriate provider.
         /// </summary>
         protected override void DeleteObject()

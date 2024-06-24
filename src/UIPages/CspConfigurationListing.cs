@@ -41,7 +41,8 @@ public class CspConfigurationListing : ListingPage
             )
             .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationSourceUrl), "Source Url", searchable: true)
             .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationDirectives), "Directives", formatter: FormatDirectives)
-            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationEnabled), "Enabled");
+            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationEnabled), "Enabled")
+            .AddColumn(nameof(CSPConfigurationInfo.CSPConfigurationUseNonce), "Use Nonce?");
 
         await base.ConfigurePage();
     }

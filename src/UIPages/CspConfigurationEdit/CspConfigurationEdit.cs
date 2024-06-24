@@ -49,6 +49,7 @@ internal class CspConfigurationEdit : ModelEditPage<CspConfigurationEditModel>
                 Directives = info.CSPConfigurationDirectives.Split(';', StringSplitOptions.RemoveEmptyEntries),
                 SourceUrl = info.CSPConfigurationSourceUrl,
                 Enabled = info.CSPConfigurationEnabled,
+                UseNonce = info.CSPConfigurationUseNonce,
             };
 
             return _model;

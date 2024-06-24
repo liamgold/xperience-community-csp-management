@@ -108,6 +108,20 @@ internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvid
         formItem.SetComponentName(CheckBoxComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(CSPConfigurationInfo.CSPConfigurationUseNonce),
+            Visible = true,
+            DataType = FieldDataType.Boolean,
+            Enabled = true,
+            Settings = new()
+            {
+                { nameof(TextInputProperties.Label), "Use Nonce?" },
+            }
+        };
+        formItem.SetComponentName(CheckBoxComponent.IDENTIFIER);
+        formInfo.AddFormItem(formItem);
+
         SetFormDefinition(info, formInfo);
 
         if (info.HasChanged)
