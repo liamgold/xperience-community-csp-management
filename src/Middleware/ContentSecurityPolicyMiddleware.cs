@@ -51,9 +51,6 @@ public class ContentSecurityPolicyMiddleware
                     var websiteChannelId = _websiteChannelContext.WebsiteChannelID;
                     var configurations = await _cspConfigurationService.GetCspConfigurationsByWebsiteChannelID(websiteChannelId);
 
-                    var cspNonceService = context.RequestServices.GetRequiredService<ICspNonceService>();
-                    var nonce = cspNonceService?.Nonce ?? string.Empty;
-
                     var groupedConfigurations = configurations
                         .SelectMany(c => c.CSPConfigurationDirectives
                             .Split(';', StringSplitOptions.RemoveEmptyEntries)
@@ -64,6 +61,17 @@ public class ContentSecurityPolicyMiddleware
                                 UseNonce = c.CSPConfigurationUseNonce
                             }))
                         .GroupBy(x => x.Directive);
+
+                    if (!groupedConfigurations.Any())
+                    {
+                        // If there are no grouped configurations, copy the response back to the original stream and exit
+                        responseBodyStream.Seek(0, SeekOrigin.Begin);
+                        await responseBodyStream.CopyToAsync(originalBodyStream);
+                        return;
+                    }
+
+                    var cspNonceService = context.RequestServices.GetRequiredService<ICspNonceService>();
+                    var nonce = cspNonceService?.Nonce ?? string.Empty;
 
                     var sb = new StringBuilder();
                     foreach (var group in groupedConfigurations)
@@ -95,11 +103,10 @@ public class ContentSecurityPolicyMiddleware
                     var modifiedResponseBody = AddNonceToKenticoScripts(responseBody, nonce);
 
                     // Write the modified content back to the response stream
-                    await using (var writer = new StreamWriter(originalBodyStream, leaveOpen: true))
-                    {
-                        await writer.WriteAsync(modifiedResponseBody);
-                        await writer.FlushAsync();
-                    }
+                    responseBodyStream.Seek(0, SeekOrigin.Begin);
+                    await using var writer = new StreamWriter(originalBodyStream, leaveOpen: true);
+                    await writer.WriteAsync(modifiedResponseBody);
+                    await writer.FlushAsync();
                 }
                 else
                 {
@@ -123,14 +130,14 @@ public class ContentSecurityPolicyMiddleware
     private static bool IsHtmlResponse(HttpContext context)
     {
         // Check if the response content type indicates HTML
-        var contentType = context.Response.ContentType;
+        var contentType = context.Response?.ContentType;
         return contentType?.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private static string AddNonceToKenticoScripts(string content, string nonce)
     {
         var scriptPattern = @"(<script\b[^>]*>)(.*?)(<\/script>)";
-        var regex = new Regex(scriptPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        var regex = new Regex(scriptPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         var updatedContent = regex.Replace(content, match =>
         {
