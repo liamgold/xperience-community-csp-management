@@ -33,12 +33,17 @@ internal class CspConfigurationEditModel
     [CheckBoxComponent(Label = "Enabled", Order = 3)]
     public bool Enabled { get; set; }
 
+    [RequiredValidationRule]
+    [CheckBoxComponent(Label = "Use Nonce?", Order = 4, ExplanationText = "If another configuration for the same directive has this enabled, then that configuration takes precedence.")]
+    public bool UseNonce { get; set; }
+
     public void MapToCSPConfigurationInfo(CSPConfigurationInfo info)
     {
         info.CSPConfigurationChannelID = ChannelIDs.FirstOrDefault();
         info.CSPConfigurationSourceUrl = SourceUrl;
         info.CSPConfigurationDirectives = string.Join(";", Directives);
         info.CSPConfigurationEnabled = Enabled;
+        info.CSPConfigurationUseNonce = UseNonce;
     }
 
     public class WebsiteOnlyChannelInfoWhereConditionProvider : IObjectSelectorWhereConditionProvider

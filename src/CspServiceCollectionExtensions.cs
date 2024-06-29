@@ -13,6 +13,8 @@ public static class CspServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddXperienceCommunityCspManagement(this IServiceCollection services)
     {
+        services.AddScoped<ICspNonceService, CspNonceService>();
+
         services.AddSingleton<ICspModuleInstaller, CspModuleInstaller>();
         services.AddSingleton<ICspConfigurationService, CspConfigurationService>();
 
