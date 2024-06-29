@@ -52,6 +52,8 @@ dotnet add package XperienceCommunity.CSP
 
    var builder = WebApplication.CreateBuilder(args);
 
+   builder.Services.AddKentico();
+
    // ...
 
    builder.Services.AddXperienceCommunityCspManagement();
@@ -96,18 +98,6 @@ public class MyService
         return _cspNonceService.Nonce;
     }
 }
-```
-
-If you're using Kentico's Activity Logging Script, you can replace the HtmlHelper extension method `HtmlHelperExtensions.GetActivityLoggingScript()` with `HtmlHelperExtensions.GetActivityLoggingScriptWithNonce()` to include the nonce in the script tag.
-
-```csharp
-@using XperienceCommunity.CSP.Extensions
-
-...
-
-<head>
-    @Html.GetActivityLoggingScriptWithNonce()
-</head>
 ```
 
 ## Contributing

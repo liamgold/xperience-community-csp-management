@@ -8,7 +8,6 @@
 @using DancingGoat.Controllers
 @using DancingGoat.Models
 @using DancingGoat.ViewComponents
-@using XperienceCommunity.CSP.Extensions
 
 @inject IWebPageUrlRetriever webPageUrlRetriever;
 @inject IPreferredLanguageRetriever currentLanguageRetriever;
@@ -60,7 +59,7 @@
     <link href="~/Content/Styles/Site.css" rel="stylesheet" type="text/css" />
     <title>@title</title>
     @RenderSection("styles", required: false)
-    @Html.Kentico().ActivityLoggingScriptV2WithNonce()
+    @Html.Kentico().ActivityLoggingScriptV2()
     <page-builder-styles />
 </head>
 <body class="@ViewData["PageClass"]">
