@@ -34,15 +34,17 @@ public class ContentSecurityPolicyMiddleware
     {
         if (!context.Kentico().Preview().Enabled)
         {
+            // Store the original response body stream
+            var originalBodyStream = context.Response.Body;
+
             try
             {
-                // Intercept the response
-                var originalBodyStream = context.Response.Body;
-
+                // Replace the response body stream with a MemoryStream to intercept the response, while keeping the original stream open, so that the response can be copied back to it later
+                // This allows other middlewares to write to the response body without breaking the CSP middleware
                 using var responseBodyStream = new MemoryStream();
                 context.Response.Body = responseBodyStream;
 
-                // Proceed through the pipeline
+                // Call the next middleware in the pipeline
                 await _next(context);
 
                 // Check if the response is an HTML page
@@ -62,51 +64,36 @@ public class ContentSecurityPolicyMiddleware
                             }))
                         .GroupBy(x => x.Directive);
 
-                    if (!groupedConfigurations.Any())
+                    if (groupedConfigurations.Any())
                     {
-                        // If there are no grouped configurations, copy the response back to the original stream and exit
+                        var cspNonceService = context.RequestServices.GetRequiredService<ICspNonceService>();
+                        var nonce = cspNonceService?.Nonce ?? string.Empty;
+
+                        var cspHeader = BuildCspHeader(groupedConfigurations, nonce);
+                        if (!string.IsNullOrWhiteSpace(cspHeader))
+                        {
+                            // Using OnStarting to set the CSP header before the response is sent
+                            context.Response.OnStarting(() =>
+                            {
+                                context.Response.Headers.ContentSecurityPolicy = cspHeader;
+                                return Task.CompletedTask;
+                            });
+                        }
+
+                        // Read the response body from the MemoryStream
                         responseBodyStream.Seek(0, SeekOrigin.Begin);
-                        await responseBodyStream.CopyToAsync(originalBodyStream);
-                        return;
+                        var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
+                        var modifiedResponseBody = AddNonceToKenticoScripts(responseBody, nonce);
+
+                        responseBodyStream.SetLength(0);
+                        await using var writer = new StreamWriter(responseBodyStream, leaveOpen: true);
+                        await writer.WriteAsync(modifiedResponseBody);
+                        await writer.FlushAsync();
                     }
 
-                    var cspNonceService = context.RequestServices.GetRequiredService<ICspNonceService>();
-                    var nonce = cspNonceService?.Nonce ?? string.Empty;
-
-                    var sb = new StringBuilder();
-                    foreach (var group in groupedConfigurations)
-                    {
-                        var useNonce = group.Any(x => x.UseNonce);
-
-                        if (useNonce)
-                        {
-                            sb.Append($"{group.Key} 'nonce-{nonce}' {string.Join(" ", group.Select(config => config.Url))}; ");
-                        }
-                        else
-                        {
-                            sb.Append($"{group.Key} {string.Join(" ", group.Select(config => config.Url))}; ");
-                        }
-                    }
-
-                    var cspHeader = sb.ToString().TrimEnd(' ', ';');
-
-                    if (!string.IsNullOrWhiteSpace(cspHeader))
-                    {
-                        context.Response.Headers.ContentSecurityPolicy = cspHeader;
-                    }
-
-                    // Rewind the response stream and read its content
+                    // Copy the (potentially modified) response body back to the original stream
                     responseBodyStream.Seek(0, SeekOrigin.Begin);
-                    var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
-
-                    // Modify the response body content
-                    var modifiedResponseBody = AddNonceToKenticoScripts(responseBody, nonce);
-
-                    // Write the modified content back to the response stream
-                    responseBodyStream.Seek(0, SeekOrigin.Begin);
-                    await using var writer = new StreamWriter(originalBodyStream, leaveOpen: true);
-                    await writer.WriteAsync(modifiedResponseBody);
-                    await writer.FlushAsync();
+                    await responseBodyStream.CopyToAsync(originalBodyStream);
                 }
                 else
                 {
@@ -120,6 +107,11 @@ public class ContentSecurityPolicyMiddleware
                 _logger.LogError(ex, "An error occurred while processing the Content Security Policy.");
                 throw;
             }
+            finally
+            {
+                // Always restore the original response body stream
+                context.Response.Body = originalBodyStream;
+            }
         }
         else
         {
@@ -129,9 +121,28 @@ public class ContentSecurityPolicyMiddleware
 
     private static bool IsHtmlResponse(HttpContext context)
     {
-        // Check if the response content type indicates HTML
         var contentType = context.Response?.ContentType;
         return contentType?.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private static string BuildCspHeader(IEnumerable<IGrouping<string, DirectiveUrl>> groupedConfigurations, string nonce)
+    {
+        var sb = new StringBuilder();
+
+        foreach (var group in groupedConfigurations)
+        {
+            var useNonce = group.Any(x => x.UseNonce);
+            if (useNonce)
+            {
+                sb.Append($"{group.Key} 'nonce-{nonce}' {string.Join(" ", group.Select(config => config.Url))}; ");
+            }
+            else
+            {
+                sb.Append($"{group.Key} {string.Join(" ", group.Select(config => config.Url))}; ");
+            }
+        }
+
+        return sb.ToString().TrimEnd(' ', ';');
     }
 
     private static string AddNonceToKenticoScripts(string content, string nonce)
