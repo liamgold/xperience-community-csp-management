@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.RegularExpressions;
 using XperienceCommunity.CSP.Features.Configurations;
@@ -18,17 +19,20 @@ public class ContentSecurityPolicyMiddleware
     private readonly IWebsiteChannelContext _websiteChannelContext;
     private readonly ICspConfigurationService _cspConfigurationService;
     private readonly ILogger<ContentSecurityPolicyMiddleware> _logger;
+    private readonly ContentSecurityPolicyOptions _options;
 
     public ContentSecurityPolicyMiddleware(
         RequestDelegate next,
         IWebsiteChannelContext websiteChannelContext,
         ICspConfigurationService cspConfigurationService,
+        IOptions<ContentSecurityPolicyOptions>? options,
         ILogger<ContentSecurityPolicyMiddleware> logger)
     {
         _next = next;
         _websiteChannelContext = websiteChannelContext;
         _cspConfigurationService = cspConfigurationService;
         _logger = logger;
+        _options = options?.Value ?? new ContentSecurityPolicyOptions();
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -72,16 +76,20 @@ public class ContentSecurityPolicyMiddleware
 
                         var cspHeader = BuildCspHeader(groupedConfigurations, nonce);
 
-                        // TODO: conditionally set the report to csp header
-                        cspHeader += "; report-to csp-report";
+                        if (_options.EnableReporting == true)
+                        {
+                            cspHeader += "; report-to xbyk-csp-report";
+                        }
 
                         if (!string.IsNullOrWhiteSpace(cspHeader))
                         {
                             // Using OnStarting to set the CSP header before the response is sent
                             context.Response.OnStarting(() =>
                             {
-                                // TODO: conditionally set the reporting endpoint header
-                                context.Response.Headers.Append("Reporting-Endpoints", "csp-report=\"/csp-report/report-to\"");
+                                if (_options.EnableReporting == true)
+                                {
+                                    context.Response.Headers.Append("Reporting-Endpoints", "xbyk-csp-report=\"/csp-report/report-to\"");
+                                }
 
                                 context.Response.Headers.ContentSecurityPolicy = cspHeader;
                                 return Task.CompletedTask;
@@ -182,6 +190,11 @@ public class ContentSecurityPolicyMiddleware
         public string Url { get; set; }
         public bool UseNonce { get; set; }
     }
+}
+
+public class ContentSecurityPolicyOptions
+{
+    public bool? EnableReporting { get; set; } = false;
 }
 
 public static class ContentSecurityPolicyMiddlewareExtensions

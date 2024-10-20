@@ -45,6 +45,20 @@ dotnet add package XperienceCommunity.CSP
 
 1. Install NuGet package above.
 
+1. Add the following configuration to your `appsettings.json`:
+
+   ```json
+    {
+      "ContentSecurityPolicy": {
+        "EnableReporting": true,
+      }
+    }
+   ```
+   
+    - `EnableReporting`: Set to `true` to enable reporting mode. This allows the system to capture requests that violate existing CSP headers, and shows this information within the reporting area of the CSP module. Defaults to `false`.
+        - Automatically adds [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) to CSP headers.
+        - Logs any violation reports to the module's logging table.
+
 1. Register the CSP management services using `builder.Services.AddXperienceCommunityCspManagement()`:
 
    ```csharp
@@ -63,6 +77,13 @@ dotnet add package XperienceCommunity.CSP
 1. Register the CSP management middleware using `app.UseXperienceCommunityCspManagement()`:
 
    ```csharp
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    // ...
+
+    builder.Services.Configure<ContentSecurityPolicyOptions>(builder.Configuration.GetSection("ContentSecurityPolicy"));
+
     var app = builder.Build();
 
     app.UseKentico();
