@@ -3,7 +3,7 @@ using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Websites;
 
-namespace XperienceCommunity.CSP.Services
+namespace XperienceCommunity.CSP.Features.Configurations
 {
     public interface ICspConfigurationService
     {

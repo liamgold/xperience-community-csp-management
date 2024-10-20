@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using XperienceCommunity.CSP.Admin;
-using XperienceCommunity.CSP.Services;
+using XperienceCommunity.CSP.Features.Configurations;
+using XperienceCommunity.CSP.Features.Nonce;
 
 namespace XperienceCommunity.CSP;
 
