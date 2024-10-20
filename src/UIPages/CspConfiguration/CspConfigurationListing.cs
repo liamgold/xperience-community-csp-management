@@ -8,7 +8,7 @@ using XperienceCommunity.CSP.UIPages;
     parentType: typeof(CspApplicationPage),
     slug: "list",
     uiPageType: typeof(CspConfigurationListing),
-    name: "List",
+    name: "Configurations",
     templateName: TemplateNames.LISTING,
     order: UIPageOrder.First)]
 
