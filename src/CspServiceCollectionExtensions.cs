@@ -2,6 +2,7 @@
 using XperienceCommunity.CSP.Admin;
 using XperienceCommunity.CSP.Features.Configurations;
 using XperienceCommunity.CSP.Features.Nonce;
+using XperienceCommunity.CSP.Features.ViolationReports;
 
 namespace XperienceCommunity.CSP;
 
@@ -18,6 +19,7 @@ public static class CspServiceCollectionExtensions
 
         services.AddSingleton<ICspModuleInstaller, CspModuleInstaller>();
         services.AddSingleton<ICspConfigurationService, CspConfigurationService>();
+        services.AddSingleton<ICspReportService, CspReportService>();
 
         return services;
     }
