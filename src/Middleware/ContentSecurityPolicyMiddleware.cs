@@ -7,7 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.RegularExpressions;
-using XperienceCommunity.CSP.Services;
+using XperienceCommunity.CSP.Features.Configurations;
+using XperienceCommunity.CSP.Features.Nonce;
 
 namespace XperienceCommunity.CSP;
 
@@ -70,11 +71,18 @@ public class ContentSecurityPolicyMiddleware
                         var nonce = cspNonceService?.Nonce ?? string.Empty;
 
                         var cspHeader = BuildCspHeader(groupedConfigurations, nonce);
+
+                        // TODO: conditionally set the report to csp header
+                        cspHeader += "; report-to csp-report";
+
                         if (!string.IsNullOrWhiteSpace(cspHeader))
                         {
                             // Using OnStarting to set the CSP header before the response is sent
                             context.Response.OnStarting(() =>
                             {
+                                // TODO: conditionally set the reporting endpoint header
+                                context.Response.Headers.Append("Reporting-Endpoints", "csp-report=\"/csp-report/report-to\"");
+
                                 context.Response.Headers.ContentSecurityPolicy = cspHeader;
                                 return Task.CompletedTask;
                             });
