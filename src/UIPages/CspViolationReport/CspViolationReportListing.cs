@@ -25,14 +25,14 @@ public class CspViolationReportListing : ListingPage
 
     public override async Task ConfigurePage()
     {
-        //PageConfiguration.HeaderActions.AddCommandWithConfirmation(
-        //    label: "Delete All",
-        //    command: nameof(DeleteAll),
-        //    confirmation: "Delete all reports?",
-        //    confirmationButton: "Delete",
-        //    confirmationDetail: "This can't be undone.",
-        //    icon: Icons.Bin,
-        //    destructive: true);
+        PageConfiguration.MassActions.AddCommandWithConfirmation(
+            label: "Delete selected reports",
+            command: nameof(MassDelete),
+            confirmation: "Delete selected reports?",
+            confirmationButton: "Delete",
+            confirmationDetail: "This can't be undone.",
+            icon: Icons.Bin,
+            destructive: true);
 
         PageConfiguration.TableActions.AddDeleteAction(nameof(Delete));
 
@@ -49,16 +49,31 @@ public class CspViolationReportListing : ListingPage
     [PageCommand]
     public override Task<ICommandResponse<RowActionResult>> Delete(int id) => base.Delete(id);
 
+    /// <summary>
+    /// Deletes violation report items specified by the <paramref name="identifiers"/> parameter.
+    /// </summary>
     [PageCommand]
-    public Task<ICommandResponse<MassActionResult>> DeleteAll()
+    public async Task<ICommandResponse<MassActionResult>> MassDelete(IEnumerable<int> identifiers, CancellationToken cancellationToken)
     {
         using var transaction = new CMSTransactionScope();
 
-        _cspViolationReportInfoProvider.BulkDelete(new WhereCondition());
+        try
+        {
+            var whereCondition = new WhereCondition().WhereIn(nameof(CSPViolationReportInfo.CSPViolationReportID), identifiers.ToArray());
+            _cspViolationReportInfoProvider.BulkDelete(whereCondition);
 
-        transaction.Commit();
+            transaction.Commit();
 
-        // TODO: Can't get this to trigger a full reload of the table after all rows deleted.
-        return Task.FromResult<ICommandResponse<MassActionResult>>(new CommandResponse<MassActionResult>(new MassActionResult(reload: true, refetchAll: true)));
+            var result = ResponseFrom(new MassActionResult(true));
+            result.AddSuccessMessage($"Deleted {identifiers.Count()} items.");
+
+            return result;
+        }
+        catch (Exception)
+        {
+            var result = ResponseFrom(new MassActionResult(false));
+            result.AddErrorMessage("Delete failed!");
+            return result;
+        }
     }
 }
