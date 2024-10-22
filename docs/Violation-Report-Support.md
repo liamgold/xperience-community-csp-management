@@ -1,6 +1,6 @@
 ﻿# CSP Violation Report Support
 
-As of version `3.0.0`, this module supports the use of [CSP violation reports](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to).
+As of version [v3.0.0](https://github.com/liamgold/xperience-community-csp-management/releases/tag/v3.0.0), this module supports the use of [CSP violation reports](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to).
 
 ## Setup
 

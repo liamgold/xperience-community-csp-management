@@ -1,6 +1,6 @@
 ﻿# CSP Nonce Support
 
-This module supports the use of nonces in your CSP headers.
+This module supports the use of nonces in your CSP headers. This was added in version [v2.2.0](https://github.com/liamgold/xperience-community-csp-management/releases/tag/v2.2.0) of the library.
 
 When creating a new CSP configuration, you can enable or disable a nonce being added for the selected directives. This will add a nonce to the header.
 
