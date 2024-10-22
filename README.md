@@ -75,30 +75,10 @@ dotnet add package XperienceCommunity.CSP
 1. That's it, launch your website and the module should be installed ready to go! Once you've configured your CSP headers, load a page on the website and check the headers in your browser console.
 
 
-## CSP Nonce Support
+## Additional Features
 
-This module supports the use of nonces in your CSP headers.
-
-When creating a new CSP configuration, you can enable or disable a nonce being added for the selected directives. This will add a nonce to the header.
-
-You are responsible for adding the nonce to your inline scripts and styles. You can use the `CspNonceService` to get the current nonce value. This service can be injected into your services, controllers, or views.
-
-```csharp
-public class MyService
-{
-    private readonly ICspNonceService _cspNonceService;
-
-    public MyService(ICspNonceService cspNonceService)
-    {
-        _cspNonceService = cspNonceService;
-    }
-
-    public string GetNonce()
-    {
-        return _cspNonceService.Nonce;
-    }
-}
-```
+- [CSP Nonce Support](./docs/Nonce-Support.md)
+- [CSP Violation Report Support](./docs/Violation-Report-Support.md)
 
 ## Contributing
 

@@ -63,6 +63,8 @@ builder.Services.AddXperienceCommunityCspManagement();
 
 ConfigureMembershipServices(builder.Services);
 
+builder.Services.Configure<ContentSecurityPolicyOptions>(builder.Configuration.GetSection("ContentSecurityPolicy"));
+
 var app = builder.Build();
 
 app.InitKentico();

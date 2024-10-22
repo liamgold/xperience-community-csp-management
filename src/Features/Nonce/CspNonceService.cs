@@ -1,4 +1,4 @@
-﻿namespace XperienceCommunity.CSP.Services
+﻿namespace XperienceCommunity.CSP.Features.Nonce
 {
     public interface ICspNonceService
     {
