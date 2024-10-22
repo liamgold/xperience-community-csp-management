@@ -1,6 +1,7 @@
 ﻿using CMS.DataEngine;
 using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.CSP.UIPages;
+using XperienceCommunity.CSP.UIPages.CspViolationReport;
 
 [assembly: UIPage(
     parentType: typeof(CspApplicationPage),
@@ -10,7 +11,7 @@ using XperienceCommunity.CSP.UIPages;
     templateName: TemplateNames.LISTING,
     order: 200)]
 
-namespace XperienceCommunity.CSP.UIPages;
+namespace XperienceCommunity.CSP.UIPages.CspViolationReport;
 
 public class CspViolationReportListing : ListingPage
 {
@@ -42,6 +43,8 @@ public class CspViolationReportListing : ListingPage
             .AddColumn(nameof(CSPViolationReportInfo.BlockedURL), "Blocked URL", searchable: true)
             .AddColumn(nameof(CSPViolationReportInfo.ReportedAt), "Timestamp", searchable: true, defaultSortDirection: SortTypeEnum.Desc)
             .AddColumn(nameof(CSPViolationReportInfo.UserAgent), "User Agent", searchable: true);
+
+        PageConfiguration.FilterFormModel = new ViolationReportFilterModel();
 
         await base.ConfigurePage();
     }
