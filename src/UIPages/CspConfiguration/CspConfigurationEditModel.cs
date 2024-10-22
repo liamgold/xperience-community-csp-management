@@ -3,7 +3,7 @@ using CMS.DataEngine;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 using XperienceCommunity.CSP.UIFormComponents;
 
-namespace XperienceCommunity.CSP.UIPages;
+namespace XperienceCommunity.CSP.UIPages.CspConfiguration;
 
 internal class CspConfigurationEditModel
 {

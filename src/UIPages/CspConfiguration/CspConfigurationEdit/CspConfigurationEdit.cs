@@ -1,7 +1,7 @@
 ﻿using CMS.DataEngine;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
-using XperienceCommunity.CSP.UIPages;
+using XperienceCommunity.CSP.UIPages.CspConfiguration;
 using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
 [assembly: UIPage(
@@ -12,7 +12,7 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
-namespace XperienceCommunity.CSP.UIPages;
+namespace XperienceCommunity.CSP.UIPages.CspConfiguration;
 
 internal class CspConfigurationEdit : ModelEditPage<CspConfigurationEditModel>
 {

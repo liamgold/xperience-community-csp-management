@@ -3,6 +3,7 @@ using CMS.ContentEngine;
 using CMS.DataEngine;
 using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.CSP.UIPages;
+using XperienceCommunity.CSP.UIPages.CspConfiguration;
 
 [assembly: UIPage(
     parentType: typeof(CspApplicationPage),
@@ -12,7 +13,7 @@ using XperienceCommunity.CSP.UIPages;
     templateName: TemplateNames.LISTING,
     order: UIPageOrder.First)]
 
-namespace XperienceCommunity.CSP.UIPages;
+namespace XperienceCommunity.CSP.UIPages.CspConfiguration;
 
 public class CspConfigurationListing : ListingPage
 {
