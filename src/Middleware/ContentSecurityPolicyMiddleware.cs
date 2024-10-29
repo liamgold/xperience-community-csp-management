@@ -91,7 +91,15 @@ public class ContentSecurityPolicyMiddleware
                                     context.Response.Headers.Append("Reporting-Endpoints", "xbyk-csp-report=\"/csp-report/report-to\"");
                                 }
 
-                                context.Response.Headers.ContentSecurityPolicy = cspHeader;
+                                if (_options.EnableReportOnlyMode == true)
+                                {
+                                    context.Response.Headers.ContentSecurityPolicyReportOnly = cspHeader;
+                                }
+                                else
+                                {
+                                    context.Response.Headers.ContentSecurityPolicy = cspHeader;
+                                }
+
                                 return Task.CompletedTask;
                             });
                         }
@@ -195,6 +203,8 @@ public class ContentSecurityPolicyMiddleware
 public class ContentSecurityPolicyOptions
 {
     public bool? EnableReporting { get; set; } = false;
+
+    public bool? EnableReportOnlyMode { get; set; } = false;
 }
 
 public static class ContentSecurityPolicyMiddlewareExtensions

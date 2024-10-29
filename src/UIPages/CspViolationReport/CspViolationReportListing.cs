@@ -40,6 +40,7 @@ public class CspViolationReportListing : ListingPage
         PageConfiguration.ColumnConfigurations
             .AddColumn(nameof(CSPViolationReportInfo.DocumentURL), "Document URL", searchable: true)
             .AddColumn(nameof(CSPViolationReportInfo.EffectiveDirective), "Violated Directive", searchable: true)
+            .AddColumn(nameof(CSPViolationReportInfo.Disposition), "Disposition", searchable: true)
             .AddColumn(nameof(CSPViolationReportInfo.BlockedURL), "Blocked URL", searchable: true)
             .AddColumn(nameof(CSPViolationReportInfo.ReportedAt), "Timestamp", searchable: true, defaultSortDirection: SortTypeEnum.Desc)
             .AddColumn(nameof(CSPViolationReportInfo.UserAgent), "User Agent", searchable: true);
