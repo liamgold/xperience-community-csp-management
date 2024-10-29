@@ -9,7 +9,8 @@ You can enable reporting mode by adding the following configuration to your `app
 ```json
 {
   "ContentSecurityPolicy": {
-	"EnableReporting": true
+	"EnableReporting": true,
+	"EnableReportOnlyMode": true
   }
 }
 ```
@@ -32,3 +33,5 @@ var app = builder.Build();
 ## Configuration
 
 `EnableReporting` is set to `false` by default. When set to `true`, the system captures requests that violate existing CSP headers and shows this information within the reporting area of the CSP module.
+
+`EnableReportOnlyMode` is set to `false` by default. When set to `true`, the system will only report violations and not enforce the CSP headers.
