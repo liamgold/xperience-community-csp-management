@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using System.Runtime.Serialization;
 
 using CMS;
 using CMS.DataEngine;
@@ -14,7 +13,6 @@ namespace XperienceCommunity.CSP
     /// <summary>
     /// Data container class for <see cref="CSPViolationReportInfo"/>.
     /// </summary>
-    [Serializable]
     public partial class CSPViolationReportInfo : AbstractInfo<CSPViolationReportInfo, IInfoProvider<CSPViolationReportInfo>>, IInfoWithId
     {
         /// <summary>
@@ -223,17 +221,6 @@ namespace XperienceCommunity.CSP
         protected override void SetObject()
         {
             Provider.Set(this);
-        }
-
-
-        /// <summary>
-        /// Constructor for de-serialization.
-        /// </summary>
-        /// <param name="info">Serialization info.</param>
-        /// <param name="context">Streaming context.</param>
-        protected CSPViolationReportInfo(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
 

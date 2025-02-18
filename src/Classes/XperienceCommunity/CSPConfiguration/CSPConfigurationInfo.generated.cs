@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +15,6 @@ namespace XperienceCommunity.CSP
     /// <summary>
     /// Data container class for <see cref="CSPConfigurationInfo"/>.
     /// </summary>
-    [Serializable]
     public partial class CSPConfigurationInfo : AbstractInfo<CSPConfigurationInfo, IInfoProvider<CSPConfigurationInfo>>, IInfoWithId
     {
         /// <summary>
@@ -119,17 +117,6 @@ namespace XperienceCommunity.CSP
         protected override void SetObject()
         {
             Provider.Set(this);
-        }
-
-
-        /// <summary>
-        /// Constructor for de-serialization.
-        /// </summary>
-        /// <param name="info">Serialization info.</param>
-        /// <param name="context">Streaming context.</param>
-        protected CSPConfigurationInfo(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
 
