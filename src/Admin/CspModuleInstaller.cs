@@ -379,10 +379,28 @@ internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvid
 
         SetFormDefinition(info, formInfo);
 
+        CreateUIForms();
+
         if (info.HasChanged)
         {
             DataClassInfoProvider.SetDataClassInfo(info);
         }
+    }
+
+    private static void CreateUIForms()
+    {
+        //public const string CREATE_XML = """
+        //     <xml>....
+        //     """;
+
+        //var newForm = new AlternativeFormInfo
+        //{
+        //    FormDefinition = set XML
+        //    etc ...
+        //};
+
+
+        // then same again for EDIT/UPDATE
     }
 
     /// <summary>
