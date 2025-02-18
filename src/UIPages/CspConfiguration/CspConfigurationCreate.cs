@@ -18,18 +18,18 @@ internal class CspConfigurationCreate : ModelEditPage<CspConfigurationEditModel>
 {
     private CspConfigurationEditModel? _model;
     private readonly IInfoProvider<CSPConfigurationInfo> _cspConfigurationInfoProvider;
-    private readonly IPageUrlGenerator _pageUrlGenerator;
+    private readonly IPageLinkGenerator _pageLinkGenerator;
 
     protected override CspConfigurationEditModel Model => _model ??= new CspConfigurationEditModel();
 
     public CspConfigurationCreate(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
-        IPageUrlGenerator pageUrlGenerator,
+        IPageLinkGenerator pageLinkGenerator,
         IInfoProvider<CSPConfigurationInfo> cspConfigurationInfoProvider)
         : base(formItemCollectionProvider, formDataBinder)
     {
-        _pageUrlGenerator = pageUrlGenerator;
+        _pageLinkGenerator = pageLinkGenerator;
         _cspConfigurationInfoProvider = cspConfigurationInfoProvider;
     }
 
@@ -48,8 +48,9 @@ internal class CspConfigurationCreate : ModelEditPage<CspConfigurationEditModel>
     {
         var baseResult = await base.ProcessFormData(model, formItems);
 
-        var navigateResponse = NavigateTo(
-            _pageUrlGenerator.GenerateUrl<CspConfigurationListing>());
+        var listingUrl = _pageLinkGenerator.GetPath<CspConfigurationListing>();
+
+        var navigateResponse = NavigateTo(listingUrl);
 
         foreach (var message in baseResult.Messages)
         {

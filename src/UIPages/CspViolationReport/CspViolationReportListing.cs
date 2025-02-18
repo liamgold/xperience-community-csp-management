@@ -64,7 +64,7 @@ public class CspViolationReportListing : ListingPage
         try
         {
             var whereCondition = new WhereCondition().WhereIn(nameof(CSPViolationReportInfo.CSPViolationReportID), identifiers.ToArray());
-            _cspViolationReportInfoProvider.BulkDelete(whereCondition);
+            await Task.Run(() => _cspViolationReportInfoProvider.BulkDelete(whereCondition), cancellationToken);
 
             transaction.Commit();
 
