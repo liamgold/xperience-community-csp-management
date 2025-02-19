@@ -21,6 +21,14 @@ Listing shows all configurations, including which web channel they are assigned 
   <img src="src/images/csp-listing.png" width="600" alt="CSP configuration listing screen">
 </a>
 
+## Additional Features
+
+| Feature                      | Version Added   | Documentation                                                     |
+| -----------------            | --------------- | ---------------                                                   |
+| CSP Nonce Support            | 2.2.0           | [Nonce-Support.md](./docs/Nonce-Support.md)                       |
+| CSP Violation Report Support | 3.0.0           | [Violation-Report-Support.md](./docs/Violation-Report-Support.md) |
+| User Permissions             | 4.0.0           | [User-Permissions.md](./docs/User-Permissions.md)                 |
+
 ## Library Version Matrix
 
 | Xperience Version | Library Version |
@@ -75,12 +83,6 @@ dotnet add package XperienceCommunity.CSP
 
 1. That's it, launch your website and the module should be installed ready to go! Once you've configured your CSP headers, load a page on the website and check the headers in your browser console.
 
-
-## Additional Features
-
-- [CSP Nonce Support](./docs/Nonce-Support.md) [v2.2.0]
-- [CSP Violation Report Support](./docs/Violation-Report-Support.md) [v3.0.0]
-- [User Permissions](./docs/User-Permissions.md) [v4.0.0]
 
 ## Contributing
 
