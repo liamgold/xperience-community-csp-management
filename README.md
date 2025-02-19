@@ -78,9 +78,9 @@ dotnet add package XperienceCommunity.CSP
 
 ## Additional Features
 
-- [CSP Nonce Support](./docs/Nonce-Support.md)
-- [CSP Violation Report Support](./docs/Violation-Report-Support.md)
-- [User Permissions](./docs/User-Permissions.md)
+- [CSP Nonce Support](./docs/Nonce-Support.md) [v2.2.0]
+- [CSP Violation Report Support](./docs/Violation-Report-Support.md) [v3.0.0]
+- [User Permissions](./docs/User-Permissions.md) [v4.0.0]
 
 ## Contributing
 
