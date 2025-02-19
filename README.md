@@ -80,6 +80,7 @@ dotnet add package XperienceCommunity.CSP
 
 - [CSP Nonce Support](./docs/Nonce-Support.md)
 - [CSP Violation Report Support](./docs/Violation-Report-Support.md)
+- [User Permissions](./docs/User-Permissions.md)
 
 ## Contributing
 
