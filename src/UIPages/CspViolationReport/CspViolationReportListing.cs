@@ -13,6 +13,7 @@ using XperienceCommunity.CSP.UIPages.CspViolationReport;
 
 namespace XperienceCommunity.CSP.UIPages.CspViolationReport;
 
+[UIEvaluatePermission(CspPermissions.VIOLATION_REPORT_VIEW)]
 public class CspViolationReportListing : ListingPage
 {
     protected override string ObjectType => CSPViolationReportInfo.OBJECT_TYPE;
@@ -50,13 +51,13 @@ public class CspViolationReportListing : ListingPage
         await base.ConfigurePage();
     }
 
-    [PageCommand]
+    [PageCommand(Permission = CspPermissions.VIOLATION_REPORT_DELETE)]
     public override Task<ICommandResponse<RowActionResult>> Delete(int id) => base.Delete(id);
 
     /// <summary>
     /// Deletes violation report items specified by the <paramref name="identifiers"/> parameter.
     /// </summary>
-    [PageCommand]
+    [PageCommand(Permission = CspPermissions.VIOLATION_REPORT_DELETE)]
     public async Task<ICommandResponse<MassActionResult>> MassDelete(IEnumerable<int> identifiers, CancellationToken cancellationToken)
     {
         using var transaction = new CMSTransactionScope();

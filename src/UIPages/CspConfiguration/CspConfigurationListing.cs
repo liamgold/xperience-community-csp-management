@@ -1,6 +1,7 @@
 ﻿using CMS.Base;
 using CMS.ContentEngine;
 using CMS.DataEngine;
+using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.CSP.UIPages;
 using XperienceCommunity.CSP.UIPages.CspConfiguration;
@@ -48,7 +49,7 @@ public class CspConfigurationListing : ListingPage
         await base.ConfigurePage();
     }
 
-    [PageCommand]
+    [PageCommand(Permission = SystemPermissions.DELETE)]
     public override Task<ICommandResponse<RowActionResult>> Delete(int id) => base.Delete(id);
 
     private string FormatDirectives(object objectValue, IDataContainer dataContainer)
