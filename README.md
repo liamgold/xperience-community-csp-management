@@ -8,17 +8,17 @@ Adds a module to the admin site for easy configuration of Content Security Polic
 
 Once installed, a new module appears in the navigation and the dashboard:
 <a href="src/images/navigation-tile.jpg">
-  <img src="src/images/navigation-tile.jpg" width="600" alt="CSP Management module in navigation">
+  <img src="src/images/navigation-tile.jpg" width="800" alt="CSP Management module in navigation">
 </a>
 
 Screen for creating a new CSP configuration (on a per source url basis):
 <a href="src/images/create-new.jpg">
-  <img src="src/images/create-new.jpg" width="600" alt="Create a new CSP configuration screen">
+  <img src="src/images/create-new.jpg" width="800" alt="Create a new CSP configuration screen">
 </a>
 
 Listing shows all configurations, including which web channel they are assigned to.
 <a href="src/images/csp-listing.jpg">
-  <img src="src/images/csp-listing.jpg" width="600" alt="CSP configuration listing screen">
+  <img src="src/images/csp-listing.jpg" width="800" alt="CSP configuration listing screen">
 </a>
 
 ## Additional Features
