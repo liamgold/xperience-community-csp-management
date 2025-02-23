@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{26EDA3E6-9
 	ProjectSection(SolutionItems) = preProject
 		docs\Nonce-Support.md = docs\Nonce-Support.md
 		docs\User-Permissions.md = docs\User-Permissions.md
+		docs\Violation-Report-Cleanup.md = docs\Violation-Report-Cleanup.md
 		docs\Violation-Report-Support.md = docs\Violation-Report-Support.md
 	EndProjectSection
 EndProject

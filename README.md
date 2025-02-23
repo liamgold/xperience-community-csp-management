@@ -23,11 +23,12 @@ Listing shows all configurations, including which web channel they are assigned 
 
 ## Additional Features
 
-| Feature                      | Version Added   | Documentation                                                     |
-| -----------------            | --------------- | ---------------                                                   |
-| CSP Nonce Support            | 2.2.0           | [Nonce-Support.md](./docs/Nonce-Support.md)                       |
-| CSP Violation Report Support | 3.0.0           | [Violation-Report-Support.md](./docs/Violation-Report-Support.md) |
-| User Permissions             | 4.0.0           | [User-Permissions.md](./docs/User-Permissions.md)                 |
+| Feature                            | Version Added   | Documentation                                                     |
+| -----------------                  | --------------- | ---------------                                                   |
+| CSP Nonce Support                  | 2.2.0           | [Nonce-Support.md](./docs/Nonce-Support.md)                       |
+| CSP Violation Report Support       | 3.0.0           | [Violation-Report-Support.md](./docs/Violation-Report-Support.md) |
+| User Permissions                   | 4.0.0           | [User-Permissions.md](./docs/User-Permissions.md)                 |
+| Automatic Violation Report Cleanup | 4.0.0           | [Violation-Report-Cleanup.md](./docs/Violation-Report-Cleanup.md) |
 
 ## Library Version Matrix
 
