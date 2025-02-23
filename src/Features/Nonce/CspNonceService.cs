@@ -1,19 +1,18 @@
-﻿namespace XperienceCommunity.CSP.Features.Nonce
+﻿namespace XperienceCommunity.CSP.Features.Nonce;
+
+public interface ICspNonceService
 {
-    public interface ICspNonceService
+    string Nonce { get; }
+}
+
+public class CspNonceService : ICspNonceService
+{
+    private readonly string _nonce;
+
+    public CspNonceService()
     {
-        string Nonce { get; }
+        _nonce = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
     }
 
-    public class CspNonceService : ICspNonceService
-    {
-        private readonly string _nonce;
-
-        public CspNonceService()
-        {
-            _nonce = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        }
-
-        public string Nonce => _nonce;
-    }
+    public string Nonce => _nonce;
 }

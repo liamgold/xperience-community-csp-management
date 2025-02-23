@@ -3,48 +3,47 @@ using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Websites;
 
-namespace XperienceCommunity.CSP.Features.Configurations
+namespace XperienceCommunity.CSP.Features.Configurations;
+
+public interface ICspConfigurationService
 {
-    public interface ICspConfigurationService
+    Task<IReadOnlyCollection<CSPConfigurationInfo>> GetCspConfigurationsByWebsiteChannelID(int websiteChannelId);
+}
+
+public class CspConfigurationService : ICspConfigurationService
+{
+    private readonly IInfoProvider<CSPConfigurationInfo> _cspConfigurationInfoProvider;
+    private readonly IInfoProvider<WebsiteChannelInfo> _websiteChannelInfoProvider;
+    private readonly IProgressiveCache _cache;
+
+    public CspConfigurationService(IInfoProvider<CSPConfigurationInfo> cspConfigurationInfoProvider, IProgressiveCache cache, IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
     {
-        Task<IReadOnlyCollection<CSPConfigurationInfo>> GetCspConfigurationsByWebsiteChannelID(int websiteChannelId);
+        _cspConfigurationInfoProvider = cspConfigurationInfoProvider;
+        _cache = cache;
+        _websiteChannelInfoProvider = websiteChannelInfoProvider;
     }
 
-    public class CspConfigurationService : ICspConfigurationService
+    public async Task<IReadOnlyCollection<CSPConfigurationInfo>> GetCspConfigurationsByWebsiteChannelID(int websiteChannelId)
     {
-        private readonly IInfoProvider<CSPConfigurationInfo> _cspConfigurationInfoProvider;
-        private readonly IInfoProvider<WebsiteChannelInfo> _websiteChannelInfoProvider;
-        private readonly IProgressiveCache _cache;
-
-        public CspConfigurationService(IInfoProvider<CSPConfigurationInfo> cspConfigurationInfoProvider, IProgressiveCache cache, IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
+        return await _cache.LoadAsync(async s =>
         {
-            _cspConfigurationInfoProvider = cspConfigurationInfoProvider;
-            _cache = cache;
-            _websiteChannelInfoProvider = websiteChannelInfoProvider;
-        }
+            s.GetCacheDependency = () =>
+                CacheHelper.GetCacheDependency(
+                    [
+                        $"{CSPConfigurationInfo.OBJECT_TYPE}|all",
+                        $"{ChannelInfo.OBJECT_TYPE}|all",
+                        $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
+                    ]);
 
-        public async Task<IReadOnlyCollection<CSPConfigurationInfo>> GetCspConfigurationsByWebsiteChannelID(int websiteChannelId)
-        {
-            return await _cache.LoadAsync(async s =>
-            {
-                s.GetCacheDependency = () =>
-                    CacheHelper.GetCacheDependency(
-                        [
-                            $"{CSPConfigurationInfo.OBJECT_TYPE}|all",
-                            $"{ChannelInfo.OBJECT_TYPE}|all",
-                            $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
-                        ]);
+            var cspConfigurations = await _cspConfigurationInfoProvider.Get()
+                .Source(sourceItem => sourceItem.Join<WebsiteChannelInfo>(nameof(CSPConfigurationInfo.CSPConfigurationChannelID), nameof(WebsiteChannelInfo.WebsiteChannelChannelID)))
+                .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), websiteChannelId)
+                .WhereTrue(nameof(CSPConfigurationInfo.CSPConfigurationEnabled))
+                .GetEnumerableTypedResultAsync()
+                .ConfigureAwait(false);
 
-                var cspConfigurations = await _cspConfigurationInfoProvider.Get()
-                    .Source(sourceItem => sourceItem.Join<WebsiteChannelInfo>(nameof(CSPConfigurationInfo.CSPConfigurationChannelID), nameof(WebsiteChannelInfo.WebsiteChannelChannelID)))
-                    .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), websiteChannelId)
-                    .WhereTrue(nameof(CSPConfigurationInfo.CSPConfigurationEnabled))
-                    .GetEnumerableTypedResultAsync()
-                    .ConfigureAwait(false);
+            return cspConfigurations.ToList();
 
-                return cspConfigurations.ToList();
-
-            }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(CspConfigurationService)}.{nameof(GetCspConfigurationsByWebsiteChannelID)}|{websiteChannelId}"));
-        }
+        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(CspConfigurationService)}.{nameof(GetCspConfigurationsByWebsiteChannelID)}|{websiteChannelId}"));
     }
 }

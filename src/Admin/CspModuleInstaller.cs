@@ -2,22 +2,27 @@
 using CMS.DataEngine;
 using CMS.FormEngine;
 using CMS.Modules;
+using CMS.Scheduler;
+using CMS.Scheduler.Internal;
 using Kentico.Xperience.Admin.Base.Forms;
+using XperienceCommunity.CSP.Tasks;
 using static XperienceCommunity.CSP.Admin.CspConstants;
 
 namespace XperienceCommunity.CSP.Admin;
 
 internal interface ICspModuleInstaller
 {
-    void Install();
+    Task Install();
 }
 
-internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider) : ICspModuleInstaller
+internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider, IInfoProvider<ScheduledTaskConfigurationInfo> taskInfoProvider) : ICspModuleInstaller
 {
-    public void Install()
+    public async Task Install()
     {
         var resourceInfo = InstallModule();
+
         InstallModuleClasses(resourceInfo);
+        await InstallScheduledTasks();
     }
 
     private ResourceInfo InstallModule()
@@ -397,5 +402,32 @@ internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvid
         {
             info.ClassFormDefinition = form.GetXmlDefinition();
         }
+    }
+
+    private async Task InstallScheduledTasks()
+    {
+        var existingTask = await taskInfoProvider.GetAsync(ViolationReportCleanupTask.TASK_NAME);
+        if (existingTask is not null)
+        {
+            return;
+        }
+
+        var interval = SchedulingHelper.EncodeInterval(new TaskInterval
+        {
+            Period = SchedulingHelper.PERIOD_MONTH,
+        });
+
+        var task = new ScheduledTaskConfigurationInfo
+        {
+            ScheduledTaskConfigurationScheduledTaskIdentifier = ViolationReportCleanupTask.IDENTIFIER,
+            ScheduledTaskConfigurationDisplayName = $"Clean CSP violation reports",
+            ScheduledTaskConfigurationData = "",
+            ScheduledTaskConfigurationName = ViolationReportCleanupTask.TASK_NAME,
+            ScheduledTaskConfigurationEnabled = false,
+            ScheduledTaskConfigurationInterval = interval,
+            ScheduledTaskConfigurationDeleteAfterLastRun = false,
+            ScheduledTaskConfigurationCreatedDynamically = false,
+        };
+        task.Insert();
     }
 }

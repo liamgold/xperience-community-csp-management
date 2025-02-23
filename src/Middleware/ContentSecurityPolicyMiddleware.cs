@@ -205,6 +205,8 @@ public class ContentSecurityPolicyOptions
     public bool? EnableReporting { get; set; } = false;
 
     public bool? EnableReportOnlyMode { get; set; } = false;
+
+    public int ViolationReportsDeletionDays { get; set; } = 90;
 }
 
 public static class ContentSecurityPolicyMiddlewareExtensions
