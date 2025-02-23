@@ -2,8 +2,8 @@
 
 As of version [v3.0.0](https://github.com/liamgold/xperience-community-csp-management/releases/tag/v3.0.0), this module supports the use of [CSP violation reports](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to).
 
-<a href="src/images/violation-reports.jpg">
-  <img src="src/images/violation-reports.jpg" width="800" alt="Violation Report listing screen">
+<a href="/src/images/violation-reports.jpg">
+  <img src="/src/images/violation-reports.jpg" width="800" alt="Violation Report listing screen">
 </a>
 
 ## Setup
