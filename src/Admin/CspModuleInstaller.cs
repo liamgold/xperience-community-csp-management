@@ -12,17 +12,17 @@ namespace XperienceCommunity.CSP.Admin;
 
 internal interface ICspModuleInstaller
 {
-    Task Install();
+    void Install();
 }
 
 internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider, IInfoProvider<ScheduledTaskConfigurationInfo> taskInfoProvider) : ICspModuleInstaller
 {
-    public async Task Install()
+    public void Install()
     {
         var resourceInfo = InstallModule();
 
         InstallModuleClasses(resourceInfo);
-        await InstallScheduledTasks();
+        InstallScheduledTasks();
     }
 
     private ResourceInfo InstallModule()
@@ -404,9 +404,10 @@ internal class CspModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvid
         }
     }
 
-    private async Task InstallScheduledTasks()
+    private void InstallScheduledTasks()
     {
-        var existingTask = await taskInfoProvider.GetAsync(ViolationReportCleanupTask.TASK_NAME);
+        var existingTask = taskInfoProvider.Get(ViolationReportCleanupTask.TASK_NAME);
+
         if (existingTask is not null)
         {
             return;

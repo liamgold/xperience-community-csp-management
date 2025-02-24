@@ -26,13 +26,5 @@ internal class CspModule : Module
         ApplicationEvents.Initialized.Execute += InitializeModule;
     }
 
-    private async void InitializeModule(object? sender, EventArgs e)
-    {
-        if (_installer is null)
-        {
-            return;
-        }
-
-        await _installer.Install();
-    }
+    private void InitializeModule(object? sender, EventArgs e) => _installer?.Install();
 }
