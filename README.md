@@ -34,6 +34,7 @@ Listing shows all configurations, including which web channel they are assigned 
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
+| >= 30.11.0        | 5.0.0           |
 | >= 30.1.3         | 4.0.0           |
 | >= 29.1.4         | 2.0.0           |
 | >= 28.3.0         | 1.0.0           |
