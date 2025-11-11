@@ -1,5 +1,11 @@
 ﻿# Xperience Community: Content Security Policy (CSP) Management
 
+[![NuGet](https://img.shields.io/nuget/v/XperienceCommunity.CSP.svg)](https://www.nuget.org/packages/XperienceCommunity.CSP)
+[![Downloads](https://img.shields.io/nuget/dt/XperienceCommunity.CSP?color=cc9900)](https://www.nuget.org/packages/XperienceCommunity.CSP)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat)](https://github.com/liamgold/xperience-community-csp-management/blob/main/LICENSE.md)
+[![CI](https://github.com/liamgold/xperience-community-csp-management/actions/workflows/ci.yml/badge.svg)](https://github.com/liamgold/xperience-community-csp-management/actions/workflows/ci.yml)
+[![GitHub stars](https://img.shields.io/github/stars/liamgold/xperience-community-csp-management?style=flat&label=stars&logo=github)](https://github.com/liamgold/xperience-community-csp-management/stargazers)
+
 ## Description
 
 Adds a module to the admin site for easy configuration of Content Security Policy (CSP) headers for web channels.
