@@ -92,6 +92,33 @@ dotnet add package XperienceCommunity.CSP
 1. That's it, launch your website and the module should be installed ready to go! Once you've configured your CSP headers, load a page on the website and check the headers in your browser console.
 
 
+## Troubleshooting
+
+### Namespace clash after running code generation
+
+This module installs its own database classes (`XperienceCommunity.CSPConfiguration` and `XperienceCommunity.CSPViolationReport`) when your application starts. If you run the Xperience [code generator](https://docs.kentico.com/documentation/developers-and-admins/api/generate-code-files-for-system-objects) for classes (for example after an upgrade), it will generate a **duplicate** copy of these classes into your own project, because the module's classes are not excluded by default.
+
+This leaves two classes registered for the same object type, which causes errors such as the following when deleting a **single** violation report (or CSP configuration) from the admin UI:
+
+```
+Unable to cast object of type 'XperienceCommunity.Classes.CSPViolationReport.CSPViolationReportInfo' to type 'XperienceCommunity.CSP.CSPViolationReportInfo'.
+```
+
+**Fix:** delete the duplicate generated classes from your project. They will have a namespace beginning with `XperienceCommunity.Classes.` (typically under a `Classes/` folder), rather than the `XperienceCommunity.CSP` namespace shipped by the package.
+
+**Prevention:** exclude this module's classes when you run code generation. You can target just this module, or exclude all community-package classes under the `XperienceCommunity` prefix:
+
+```powershell
+# Exclude only this module's classes (recommended)
+dotnet run --no-build -- --kxp-codegen --type "Classes" --exclude "XperienceCommunity.CSP*"
+
+# Or exclude all XperienceCommunity.* community-package classes
+dotnet run --no-build -- --kxp-codegen --type "Classes" --exclude "XperienceCommunity.*"
+```
+
+> The `--exclude` pattern matches class names. This module registers `XperienceCommunity.CSPConfiguration` and `XperienceCommunity.CSPViolationReport`, so `XperienceCommunity.CSP*` targets exactly these two. `XperienceCommunity.*` is broader — it also excludes any other classes named with that prefix (including other community packages, or your own), so only use it if that is what you intend. This same clash can affect any community package whose classes are not excluded from generation.
+
+
 ## Contributing
 
 Feel free to submit issues or pull requests to the repository, this is a community package and everyone is welcome to support.
