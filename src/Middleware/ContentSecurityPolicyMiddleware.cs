@@ -13,7 +13,7 @@ using XperienceCommunity.CSP.Features.Nonce;
 
 namespace XperienceCommunity.CSP;
 
-public class ContentSecurityPolicyMiddleware
+public partial class ContentSecurityPolicyMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IWebsiteChannelContext _websiteChannelContext;
@@ -171,10 +171,7 @@ public class ContentSecurityPolicyMiddleware
 
     private static string AddNonceToKenticoScripts(string content, string nonce)
     {
-        var scriptPattern = @"(<script\b[^>]*>)(.*?)(<\/script>)";
-        var regex = new Regex(scriptPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-        var updatedContent = regex.Replace(content, match =>
+        var updatedContent = ScriptElementRegex().Replace(content, match =>
         {
             var openingTag = match.Groups[1].Value;
             var scriptContent = match.Groups[2].Value;
@@ -191,6 +188,9 @@ public class ContentSecurityPolicyMiddleware
 
         return updatedContent;
     }
+
+    [GeneratedRegex(@"(<script\b[^>]*>)(.*?)(<\/script>)", RegexOptions.Singleline | RegexOptions.IgnoreCase)]
+    private static partial Regex ScriptElementRegex();
 
     private struct DirectiveUrl
     {
