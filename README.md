@@ -119,6 +119,28 @@ dotnet run --no-build -- --kxp-codegen --type "Classes" --exclude "XperienceComm
 > The `--exclude` pattern matches class names. This module registers `XperienceCommunity.CSPConfiguration` and `XperienceCommunity.CSPViolationReport`, so `XperienceCommunity.CSP*` targets exactly these two. `XperienceCommunity.*` is broader — it also excludes any other classes named with that prefix (including other community packages, or your own), so only use it if that is what you intend. This same clash can affect any community package whose classes are not excluded from generation.
 
 
+## Running the Example Project
+
+The repository includes a Dancing Goat sample site in `examples/DancingGoat`, generated from the Xperience by Kentico 30.11.0 template, with this module wired up in `Program.cs`. To run it locally:
+
+1. Create the database from the `examples/DancingGoat` folder. This uses the database manager version pinned in the project's tool manifest, so the schema and sample data match the Xperience version used by the example:
+
+   ```powershell
+   cd examples/DancingGoat
+   dotnet tool restore
+   dotnet kentico-xperience-dbmanager -- -s "localhost" -d "CSP-DancingGoat" -a "<admin password>" --hash-string-salt "3a93ddd7-3de5-46a1-a363-dd3eed0a54c0" --sample-website-domain "localhost:53955" --license-file "<path to license file>"
+   ```
+
+   Adjust the server name and connection string in `appsettings.json` if you are not using a local default SQL Server instance. A license key valid for `localhost` is required for the site to render.
+
+2. Run the site:
+
+   ```powershell
+   dotnet run --project examples/DancingGoat/DancingGoat.csproj
+   ```
+
+3. Sign in to the administration at `https://localhost:53955/admin` and add configurations under **CSP management**.
+
 ## Contributing
 
 Feel free to submit issues or pull requests to the repository, this is a community package and everyone is welcome to support.

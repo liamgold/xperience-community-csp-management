@@ -1,14 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using DancingGoat;
+using DancingGoat.EmailComponents;
+using DancingGoat.Helpers.Generators;
 using DancingGoat.Models;
 
+using CMS;
+using CMS.Base;
+
 using Kentico.Activities.Web.Mvc;
+using Kentico.Commerce.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+using Kentico.EmailBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
+using Kentico.Xperience.Mjml;
 using Kentico.Web.Mvc;
 
 
@@ -20,9 +29,13 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using Samples.DancingGoat;
+
 using XperienceCommunity.CSP;
 
-
+[assembly: AssemblyDiscoverable]
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,10 +54,12 @@ builder.Services.AddKentico(features =>
         }
     });
 
+    features.UseEmailBuilder();
     features.UseWebPageRouting();
     features.UseEmailMarketing();
     features.UseEmailStatisticsLogging();
     features.UseActivityTracking();
+    features.UseCommerce();
 });
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -58,16 +73,25 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
+builder.Services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrackingEvaluator>();
 
 builder.Services.AddXperienceCommunityCspManagement();
 
+ConfigureEmailBuilder(builder.Services);
 ConfigureMembershipServices(builder.Services);
 
 builder.Services.Configure<ContentSecurityPolicyOptions>(builder.Configuration.GetSection("ContentSecurityPolicy"));
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.Configure<UrlResolveOptions>(options => options.UseSSL = false);
+}
+
 var app = builder.Build();
 
 app.InitKentico();
+
+app.InitializeDancingGoat();
 
 app.UseStaticFiles();
 
@@ -148,5 +172,29 @@ static void ConfigureMembershipServices(IServiceCollection services)
         };
     });
 
+    services.Configure<AdminIdentityOptions>(options =>
+    {
+        // The expiration time span of 8 hours is set for demo purposes only. In production environments, set expiration according to best practices.
+        options.AuthenticationOptions.ExpireTimeSpan = TimeSpan.FromHours(8);
+
+        // The forbidden passwords are set for demo purposes only. In production environments, set password options according to best practices.
+        var companySpecificKeywords = new List<string> { "kentico", "dancinggoat", "admin", "coffee" };
+        var specificNumberCombinations = new List<string> { "2023", "23", "2024", "24", "2025", "25" };
+        options.PasswordOptions.ForbiddenPasswords = ForbiddenPasswordGenerator.Generate(companySpecificKeywords, specificNumberCombinations);
+    });
+
     services.AddAuthorization();
+}
+
+
+static void ConfigureEmailBuilder(IServiceCollection services)
+{
+    services.Configure((EmailBuilderOptions options) =>
+    {
+        options.AllowedEmailContentTypeNames = ["DancingGoat.BuilderEmail"];
+        options.RegisterDefaultSection = false;
+        options.DefaultSectionIdentifier = DancingGoatFullWidthEmailSection.IDENTIFIER;
+    });
+
+    services.AddMjmlForEmails();
 }
